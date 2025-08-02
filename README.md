@@ -1,41 +1,55 @@
 # LAN Scenario 05 – DHCP Configuration Using a Cisco Router
 
 ## 🎯 Objective
-To configure a Cisco router as a DHCP server that automatically assigns IP addresses to LAN devices.
+Set up a basic LAN where a Cisco router acts as a **DHCP server** that automatically assigns IP addresses to connected PCs.
+
+---
 
 ## 🧱 Devices Used
-- 1× Router
+- 1× Router (Cisco 2911 or similar)
 - 1× Switch
 - 3× PCs
 - Copper Straight-through cables
 
+---
+
 ## 🧠 Network Topology
 
-The router provides IP addresses to the PCs through DHCP.
+The router is configured to assign IPs using DHCP.  
+Each PC gets its configuration automatically.
 
 
-## 🌐 IP Configuration
+🖼️ Network Diagram:  
+![Topology](./topology.PNG)
 
-| Device   | Interface   | IP Address      | Notes                  |
-|----------|-------------|------------------|-------------------------|
-| Router   | Gig0/0      | 192.168.10.1     | DHCP Server             |
-| PC0      | —           | DHCP             | Gets IP from router     |
-| PC1      | —           | DHCP             | Gets IP from router     |
-| PC2      | —           | DHCP             | Gets IP from router     |
+---
 
-### DHCP Pool:
-- **Network:** 192.168.10.0/24
-- **Default Gateway:** 192.168.10.1
+## 🌐 IP Addressing Plan
+
+| Device   | Interface   | IP Address      | Notes                      |
+|----------|-------------|------------------|-----------------------------|
+| Router   | G0/0        | 192.168.10.1     | DHCP Default Gateway        |
+| PC0      | —           | DHCP             | Receives IP from router     |
+| PC1      | —           | DHCP             | Receives IP from router     |
+| PC2      | —           | DHCP             | Receives IP from router     |
+
+- **Network:** 192.168.10.0/24  
+- **Default Gateway:** 192.168.10.1  
+- **Excluded IPs:** 192.168.10.1 – 192.168.10.9  
+- **DHCP Pool Range:** 192.168.10.10 – 192.168.10.254  
 - **DNS Server:** 8.8.8.8
-- **Excluded IPs:** 192.168.10.1 – 192.168.10.9
 
-## 🔧 Router Configuration
+---
+
+## ⚙️ Router Configuration (DHCP Setup)
 
 ```bash
+enable
+configure terminal
+
 interface gig0/0
  ip address 192.168.10.1 255.255.255.0
  no shutdown
- ip nat inside
 exit
 
 ip dhcp excluded-address 192.168.10.1 192.168.10.9
